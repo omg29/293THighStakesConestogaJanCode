@@ -4,7 +4,7 @@
 #include "subsystems.hpp"
 #include "pros/rtos.hpp"
 #include "lb.hpp"
-
+#include "intake.hpp"
 
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
@@ -41,6 +41,9 @@ void initialize() {
 
   //lb
   pros::Task ladyBrownTask(lbAsyncControl);
+
+  //intake control
+  pros::Task intakeTask(asyncIntakeControl);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);  // Enables modifying the controller curve with buttons on the joysticks
