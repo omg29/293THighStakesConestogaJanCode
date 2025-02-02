@@ -9,7 +9,9 @@
 /////
 // For installation, upgrading, documentations, and tutorials, check out our website!
 // https://ez-robotics.github.io/EZ-Template/
-/////rop5--cffrrrrrr
+/////
+
+inline ez::tracking_wheel odomWheel(1, 2.75, CENTERDISTNIGGE);
 
 // Chassis constructor
 ez::Drive chassis(
@@ -53,6 +55,10 @@ void initialize() {
   // Set the drive to your own constants from autons.cpp!
   default_constants();
 
+  // Horizontal Tracking Wheel Initialize
+  chassis.odom_tracker_back_set(&odomWheel);
+
+
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
   // chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
   // chassis.opcontrol_curve_buttons_right_set(pros::E_CONTROLLER_DIGITAL_Y, pros::E_CONTROLLER_DIGITAL_A);
@@ -69,15 +75,12 @@ void initialize() {
     Auton("Interference\n\nAfter driving forward, robot performs differently if interfered or not.", interfered_example), */
 
     // Add your own autons here!
+    Auton("PID Test\n\nPID Test - drive", pid_test),
+    Auton("Blue Goal Side Solo AWP (left positive)\n\n1 alliance + 1 mogo + 2 mogo\n10 points", blueGoalWP),
+    Auton("Red Goal Side Solo AWP (right positive)\n\n1 alliance + 1 mogo + 2 mogo\n10 points", redGoalWP),
+    Auton("Blue Ring Side Elims (right negative)\n\n1 alliance + 5 mogo\n10 points", blueRingElims),
+    Auton("Red Ring Side Elims (left negative)\n\n1 alliance + 5 mogo\n10 points", redRingElims),
 
-    //Auton("PID Test\n\nPID Test - drive", pid_test),
-    Auton("Blue Right Solo AWP\n\n4x first mogo, 2x second", blue_soloAWP),
-    Auton("Red Left Solo AWP\n\n1x alliance, 2x mogo + ladder", red_soloAWP),
-    //Auton("Blue Right Elims\n\n", blue_right),
-    //Auton("Blue Left Elims\n\n", blue_left),
-    //Auton("Red Right | Goal Rush", red_right),
-    //Auton("Red Left Elims\n\n", red_left),
-    Auton("Programming Skills", prog_skills)
   });
 
   // Initialize chassis and auton selector
@@ -208,13 +211,13 @@ void opcontrol() {
     
     // Intake movement
     if(master.get_digital(DIGITAL_R1)) {
-      intake.move(127);
+      setIntake(127);
     }
     else if(master.get_digital(DIGITAL_UP)) {
-      intake.move(-127);
+      setIntake(-127);
     }
     else {
-      intake.move(0);
+      setIntake(0);
     }
 
     // PNEUMATICS
